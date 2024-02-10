@@ -187,7 +187,7 @@ extension_defaults = widget_defaults.copy()
 
 screens = [
     Screen(
-        bottom=bar.Bar(
+        top=bar.Bar(
             [
                 # widget.CurrentLayout(),
                 widget.CurrentLayoutIcon(background='#2222aa'),
@@ -211,15 +211,15 @@ screens = [
                 widget.Battery(charge_char='  ',background='#ffffff',foreground='#770077',discharge_char=' ',full_char='   ',format='{char} {percent:2.0%} {hour:d}:{min:02d}'),
                 widget.CPU(foreground='#000000',background='#999999',format=' {load_percent}%'),
                 widget.Sep(),
-                widget.ThermalSensor(foreground='#000000',background='#999999',format=' {temp:.0f}{unit}'),
+                widget.ThermalSensor(foreground='#000000',background='#999999',format=' {temp:.0f}{unit}',tag_sensor='Package id 0'),
                 widget.Memory(measure_mem='G',background='#ffffff',foreground='#000000',format=' {MemUsed: .0f}{mm}/{MemTotal: .0f}{mm}'),
                 widget.Clock(format="%Y-%m-%d %a %H:%M:%S",foreground='#00aa55'),
                 widget.KeyboardLayout(configured_keyboards=['us','ru'],background='#00aa55'),
                 # widget.QuickExit(),
             ],
             30,
-            # border_width=[2, 0, 2, 0],  # Draw top and bottom borders
-            # border_color=["ff00ff", "000000", "ff00ff", "000000"]  # Borders are magenta
+            border_width=[0, 0, 1, 0],  # Draw top and bottom borders
+            border_color=["ff00ff", "000000", "ffffff", "000000"]  # Borders are magenta
         ),
         # You can uncomment this variable if you see that on X11 floating resize/moving is laggy
         # By default we handle these events delayed to already improve performance, however your system might still be struggling
