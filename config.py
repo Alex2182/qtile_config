@@ -93,7 +93,7 @@ keys = [
         "XF86MonBrightnessDown",
         lazy.spawn('light -U 2')
     ),
-    Key([mod], "d", lazy.run_extension(extension.J4DmenuDesktop(
+    Key([mod], "d", lazy.run_extension(extension.DmenuRun(# J4DmenuDesktop(
         dmenu_prompt=">",
         dmenu_font="sans",
         background="#15181a",
@@ -104,12 +104,15 @@ keys = [
         # dmenu_height=24,  # Only supported by some dmenu forks
     ))),
     Key([mod],"w",lazy.run_extension(extension.WindowList())),
-    # KeyChord([mod,"shift"], "e", [
-    #     Key([], "q", lazy.spawn("poweroff"))
-    # ]),
-    # KeyChord([mod,"shift"], "e", [
-    #     Key([], "r", lazy.spawn("reboot"))
-    # ]),
+    Key([mod],'p',lazy.run_extension(extension.CommandSet(
+    commands={
+        "Poweroff": "poweroff",
+        "Reboot": "reboot"
+        # "Logout": lazy.shutdown()
+    }
+    # ,
+    # **Theme.dmenu
+    ))),
     KeyChord([mod, "shift"], "e", [
         Key([], "r", lazy.spawn("reboot")),
         Key([], "q", lazy.spawn("poweroff")),
@@ -118,7 +121,7 @@ keys = [
         # Key([], "m", lazy.layout.maximize())
         ],
         mode=True,
-        name="Session"
+        name="Session reboot(r) poweroff(q) logout(e)"
     )
 ]
 
@@ -167,7 +170,7 @@ layouts = [
     layout.Max(),
     # Try more layouts by unleashing below layouts.
     # layout.Stack(num_stacks=1),
-    layout.Bsp(),
+    # layout.Bsp(),
     # layout.Matrix(),
     # layout.MonadTall(),
     # layout.MonadWide(),
@@ -212,19 +215,21 @@ screens = [
                 widget.CPU(foreground='#000000',background='#999999',format=' {load_percent}%'),
                 widget.Sep(),
                 widget.ThermalSensor(foreground='#000000',background='#999999',format=' {temp:.0f}{unit}',tag_sensor='Package id 0'),
-                widget.Memory(measure_mem='G',background='#ffffff',foreground='#000000',format=' {MemUsed: .0f}{mm}/{MemTotal: .0f}{mm}'),
-                widget.Clock(format="%Y-%m-%d %a %H:%M:%S",foreground='#00aa55'),
+                widget.Memory(measure_mem='G',background='#ffffff',foreground='#000000',format=' {MemUsed: .1f}{mm}/{MemTotal: .1f}{mm}'),
+                widget.Clock(format="%Y-%m-%d %a %H:%M:%S",foreground='#ffffff'),
                 widget.KeyboardLayout(configured_keyboards=['us','ru'],background='#00aa55'),
                 # widget.QuickExit(),
             ],
             30,
             border_width=[0, 0, 1, 0],  # Draw top and bottom borders
-            border_color=["ff00ff", "000000", "ffffff", "000000"]  # Borders are magenta
+             border_color=["#22ff22", "000000", "#22ff22", "000000"]  # Borders are magenta
         ),
         # You can uncomment this variable if you see that on X11 floating resize/moving is laggy
         # By default we handle these events delayed to already improve performance, however your system might still be struggling
         # This variable is set to None (no cap) by default, but you can set it to 60 to indicate that you limit it to 60 events per second
         # x11_drag_polling_rate = 60,
+        wallpaper='/usr/share/backgrounds/rhino/moon.png',
+        wallpaper_mode='stretch'
     ),
 ]
 
