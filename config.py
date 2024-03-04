@@ -69,30 +69,20 @@ keys = [
     # Toggle between different layouts as defined below
     Key([mod], "Tab", lazy.next_layout(), desc="Toggle between layouts"),
     Key([mod, "shift"], "q", lazy.window.kill(), desc="Kill focused window"),
-    Key(
-        [mod],
-        "f",
-        lazy.window.toggle_fullscreen(),
-        desc="Toggle fullscreen on the focused window",
-    ),
+    Key([mod], "f", lazy.window.toggle_fullscreen(), desc="Toggle fullscreen on the focused window", ),
     Key([mod], "t", lazy.window.toggle_floating(), desc="Toggle floating on the focused window"),
     Key([mod, "shift"], "r", lazy.reload_config(), desc="Reload the config"),
     # Key([mod, "shift"], "e", lazy.shutdown(), desc="Shutdown Qtile"),
     Key([mod], "r", lazy.spawncmd(), desc="Spawn a command using a prompt widget"),
     Key([mod],"space",lazy.widget["keyboardlayout"].next_keyboard()),
+    # Volume control
     Key([],"XF86AudioRaiseVolume",lazy.widget["volume"].increase_vol()),
     Key([],"XF86AudioLowerVolume",lazy.widget["volume"].decrease_vol()),
     Key([],"XF86AudioMute",lazy.widget["volume"].mute()),
-    Key(
-        [],
-        "XF86MonBrightnessUp",
-        lazy.spawn('light -A 2')
-    ),
-    Key(
-        [],
-        "XF86MonBrightnessDown",
-        lazy.spawn('light -U 2')
-    ),
+    Key([mod, "shift"],"s",lazy.spawn('pavucontrol'),desc="Open pulse audio control"),
+    # Brightness control
+    Key([],"XF86MonBrightnessUp",lazy.spawn('light -A 2')),
+    Key([],"XF86MonBrightnessDown",lazy.spawn('light -U 2')),
     Key([mod], "d", lazy.run_extension(extension.DmenuRun(# J4DmenuDesktop(
         dmenu_prompt=">",
         dmenu_font="sans",
@@ -140,6 +130,15 @@ for vt in range(1, 8):
 
 
 groups = [Group(i) for i in "123456789"]
+colors = [
+    ["#282a36", "#282a36"],  # panel background
+    ["#24262F", "#24262F"],  # background for current screen tab
+    ["#ffffff", "#ffffff"],  # font color for group names
+    ["#BD93F9", "#BD93F9"],  # border line color for current tab
+    ["#8d62a9", "#8d62a9"],  # border line color for other tab and odd widgets
+    ["#44475A", "#44475A"],  # color for the even widgets
+    ["#e1acff", "#e1acff"],  # window name
+]
 
 for i in groups:
     keys.extend(
@@ -182,8 +181,8 @@ layouts = [
 ]
 
 widget_defaults = dict(
-    font="sans",
-    fontsize=16,
+    font="3270 Nerd Font Condensed", #"sans",
+    fontsize=21,
     padding=3,
 )
 extension_defaults = widget_defaults.copy()
@@ -194,25 +193,26 @@ screens = [
             [
                 # widget.CurrentLayout(),
                 widget.CurrentLayoutIcon(background='#2222aa'),
-                widget.GroupBox(),
+                widget.GroupBox(font="3270 Nerd Font",fontsize=20,hide_unused=True,highlight_method='block'),
                 widget.Prompt(),
                 widget.WindowName(),
+                widget.Sep(),
                 widget.Chord(
                     chords_colors={
                         "launch": ("#ff0000", "#ffffff"),
                     },
-                    name_transform=lambda name: name.upper(),
+                    # name_transform=lambda name: name.upper(),
                 ),
                 # widget.TextBox("default config", name="default"),
                 # widget.TextBox("Press &lt;M-r&gt; to spawn", foreground="#d75f5f"),
                 # NB Systray is incompatible with Wayland, consider using StatusNotifier instead
                 widget.Systray(),
-                # widget.Wttr(location={'Izoplit':'Home'},lang='ru',format='3'),
+                widget.Wttr(location={'Izoplit':'Home'},lang='ru',format='3'),
                 widget.Wlan(interface='wlp2s0',format='  {essid} {percent:2.0%}',background='#ffffff',foreground='#000000'),
-                widget.Volume(emoji=False,step=5,fmt=' {}',background='#999999',foreground='#000000'),
+                widget.Volume(emoji=False,step=5,fmt='  {}',background='#999999',foreground='#000000'),
                 # widget.Backlight(brightness_file='intel_backlight',backlight_name='intel_backlight'),
                 widget.Battery(charge_char='  ',background='#ffffff',foreground='#770077',discharge_char=' ',full_char='   ',format='{char} {percent:2.0%} {hour:d}:{min:02d}'),
-                widget.CPU(foreground='#000000',background='#999999',format=' {load_percent}%'),
+                widget.CPU(foreground='#000000',background='#999999',format='  {load_percent}%'),
                 widget.Sep(),
                 widget.ThermalSensor(foreground='#000000',background='#999999',format=' {temp:.0f}{unit}',tag_sensor='Package id 0'),
                 widget.Memory(measure_mem='G',background='#ffffff',foreground='#000000',format=' {MemUsed: .1f}{mm}/{MemTotal: .1f}{mm}'),
