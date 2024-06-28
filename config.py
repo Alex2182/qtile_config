@@ -24,11 +24,19 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from libqtile import bar, layout, qtile, widget
+from libqtile import bar, layout, qtile, widget, hook
 from libqtile.config import Click, Drag, Group, Key, Match, Screen,KeyChord
 from libqtile.lazy import lazy
 from libqtile.utils import guess_terminal
 from libqtile import extension
+# import os
+# import subprocess
+
+
+# @hook.subscribe.startup_once
+# def autostart():
+#    script = os.path.expanduser("~/.config/qtile/start.sh")
+#    subprocess.run([script])
 
 mod = "mod4"
 terminal = guess_terminal()
@@ -41,7 +49,7 @@ keys = [
     Key([mod], "Right", lazy.layout.right(), desc="Move focus to right"),
     Key([mod], "Down", lazy.layout.down(), desc="Move focus down"),
     Key([mod], "Up", lazy.layout.up(), desc="Move focus up"),
-    Key([mod], "space", lazy.layout.next(), desc="Move window focus to other window"),
+    # Key([mod], "space", lazy.layout.next(), desc="Move window focus to other window"),
     # Move windows between left/right columns or move up/down in current stack.
     # Moving out of range in Columns layout will create new column.
     Key([mod, "shift"], "Left", lazy.layout.shuffle_left(), desc="Move window to the left"),
@@ -59,12 +67,7 @@ keys = [
     # Split = all windows displayed
     # Unsplit = 1 window displayed, like Max layout, but still with
     # multiple stack panes
-    Key(
-        [mod, "shift"],
-        "Return",
-        lazy.layout.toggle_split(),
-        desc="Toggle between split and unsplit sides of stack",
-    ),
+    Key([mod, "shift"],"Return",lazy.layout.toggle_split(),desc="Toggle between split and unsplit sides of stack",),
     Key([mod], "Return", lazy.spawn(terminal), desc="Launch terminal"),
     # Toggle between different layouts as defined below
     Key([mod], "Tab", lazy.next_layout(), desc="Toggle between layouts"),
@@ -73,8 +76,10 @@ keys = [
     Key([mod], "t", lazy.window.toggle_floating(), desc="Toggle floating on the focused window"),
     Key([mod, "shift"], "r", lazy.reload_config(), desc="Reload the config"),
     # Key([mod, "shift"], "e", lazy.shutdown(), desc="Shutdown Qtile"),
-    Key([mod], "r", lazy.spawncmd(), desc="Spawn a command using a prompt widget"),
+    Key([mod,"shift"], "d", lazy.spawn("rofi -show drun"), desc="Rofi drun menu"),
     Key([mod],"space",lazy.widget["keyboardlayout"].next_keyboard()),
+    # Screenshot
+    Key([],"Print",lazy.spawn("flameshot gui"), desc="Flameshot screenshot"),
     # Volume control
     Key([],"XF86AudioRaiseVolume",lazy.widget["volume"].increase_vol()),
     Key([],"XF86AudioLowerVolume",lazy.widget["volume"].decrease_vol()),
@@ -83,15 +88,16 @@ keys = [
     # Brightness control
     Key([],"XF86MonBrightnessUp",lazy.spawn('light -A 2')),
     Key([],"XF86MonBrightnessDown",lazy.spawn('light -U 2')),
+    Key([mod],"l",lazy.spawn('light -S 2')),
+    Key([mod],"h",lazy.spawn('light -S 30')),
     Key([mod], "d", lazy.run_extension(extension.DmenuRun(# J4DmenuDesktop(
         dmenu_prompt=">",
-        dmenu_font="sans",
-        background="#15181a",
-        foreground="#00ff00",
-        selected_background="#079822",
-        selected_foreground="#fff",
+        dmenu_font="sans-16",
+        background="#282a36",
+        foreground="#ffffff",
+        selected_background="#BD93F9",
+        selected_foreground="#ffffff",
         dmenu_ignorecase=True
-        # dmenu_height=24,  # Only supported by some dmenu forks
     ))),
     Key([mod],"w",lazy.run_extension(extension.WindowList())),
     Key([mod],'p',lazy.run_extension(extension.CommandSet(
@@ -165,7 +171,7 @@ for i in groups:
     )
 
 layouts = [
-    layout.Columns(border_focus_stack=["#d75f5f", "#8f3d3d"], border_width=2),
+    layout.Columns(border_focus_stack=["#d75f5f", "#8f3d3d"], border_width=1),
     layout.Max(),
     # Try more layouts by unleashing below layouts.
     # layout.Stack(num_stacks=1),
@@ -192,7 +198,7 @@ screens = [
         top=bar.Bar(
             [
                 # widget.CurrentLayout(),
-                widget.CurrentLayoutIcon(background='#2222aa'),
+                widget.CurrentLayoutIcon(background='#00aa55'),
                 widget.GroupBox(font="3270 Nerd Font",fontsize=20,hide_unused=True,highlight_method='block'),
                 widget.Prompt(),
                 widget.WindowName(),
@@ -207,8 +213,9 @@ screens = [
                 # widget.TextBox("Press &lt;M-r&gt; to spawn", foreground="#d75f5f"),
                 # NB Systray is incompatible with Wayland, consider using StatusNotifier instead
                 widget.Systray(),
+                widget.Sep(),
                 widget.Wttr(location={'Izoplit':'Home'},lang='ru',format='3'),
-                widget.Wlan(interface='wlp2s0',format='  {essid} {percent:2.0%}',background='#ffffff',foreground='#000000'),
+                # widget.Wlan(interface='wlp2s0',format='  {essid} {percent:2.0%}',background='#ffffff',foreground='#000000'),
                 widget.Volume(emoji=False,step=5,fmt='  {}',background='#999999',foreground='#000000'),
                 # widget.Backlight(brightness_file='intel_backlight',backlight_name='intel_backlight'),
                 widget.Battery(charge_char='  ',background='#ffffff',foreground='#770077',discharge_char=' ',full_char='   ',format='{char} {percent:2.0%} {hour:d}:{min:02d}'),
@@ -222,7 +229,7 @@ screens = [
             ],
             30,
             border_width=[0, 0, 1, 0],  # Draw top and bottom borders
-             border_color=["#22ff22", "000000", "#22ff22", "000000"]  # Borders are magenta
+             border_color=["#22ff22", "#000000", "#22ff22", "#000000"]  # Borders are magenta
         ),
         # You can uncomment this variable if you see that on X11 floating resize/moving is laggy
         # By default we handle these events delayed to already improve performance, however your system might still be struggling
