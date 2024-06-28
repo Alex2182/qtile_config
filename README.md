@@ -1,5 +1,5 @@
 # qtile_config
-Qtile linux config for laptop (Dell) with Rhino distro on the board
+Qtile linux config for laptop (Dell) with Rhino distro and EndeavourOS
 
 ### For Wlan need to execute command
 ```python
