@@ -1,0 +1,6 @@
+[Desktop Entry]
+Name=nm-applet
+Exec=nm-applet
+Type=Application
+StartupNotify=true
+Terminal=false
