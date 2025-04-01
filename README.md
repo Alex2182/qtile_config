@@ -19,3 +19,5 @@ Qtile installation guide you can find on official [site](https://docs.qtile.org/
 [Config file](https://github.com/Alex2182/qtile_config/blob/main/config.py) place into folder ~/.config/qtile/
 
 There are several ways to start Qtile. The most common way is via an entry in your X session manager's menu. The default Qtile behavior can be invoked by creating a [qtile.desktop](https://github.com/qtile/qtile/blob/master/resources/qtile.desktop) file in /usr/share/xsessions.
+
+Also I added config for two physical monitors [config.py](https://github.com/Alex2182/qtile_config/blob/main/config_2_monitors.py)
